@@ -46,6 +46,8 @@ export default class App extends Component {
       const loggedInStatus = this.state.loggedInStatus;    
 
       //if loggedIn and Status is Logged_in
+      //if logged in status is Not_logged_in
+      //If logged in status is logged in => Not_logged_in 
 
       if(loggedIn && loggedInStatus === "LOGGED_IN"){
         return loggedIn; 
@@ -66,12 +68,18 @@ export default class App extends Component {
   componentDidMount (){
     this.checkLoginStatus();
   }
+
+  authorizedPages() {
+    return [<Route path="/blog" component={Blog} />];
+  }
+
+
   render() {
     return (
       <div className="container">
         <Router>
           <div>
-            <NavigationContainer />
+            <NavigationContainer loggedInStatus={this.state.loggedInStatus}/>
 
             <h2>{this.state.loggedInStatus}</h2>
 
@@ -91,7 +99,9 @@ export default class App extends Component {
 
               <Route path="/about-me" component={About} />
               <Route path="/contact" component={Contact} />
-              <Route path="/blog" component={Blog} />
+              {this.state.loggedInStatus==="LOGGED_IN" ?  
+              (this.authorizedPages() 
+              ): null}
               <Route
                 exact
                 path="/portfolio/:slug"
